@@ -48,7 +48,7 @@ class Heap {
     }
   }
 
-  maxHeapify(i) {
+  maxHeapify(i) { // 不太对
     const current = this.list[i];
     const left = this.list[2 * i + 1];
     const right = this.list[2 * i + 2];
