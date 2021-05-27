@@ -231,3 +231,55 @@ function take(arr, count) {
   res = res.concat(take(others, count));
   return res;
 }
+
+/**
+ * 斐波那契数列
+ * 1 1 2 3 5 8 13 21 34 55 89 ...
+ * 动态规划：适用场景为递归且具有重复的子结构
+ */
+
+// 复杂度 O(2^n)) 不可用的算法
+// 很多重复的子结构被反复计算
+function slowFib(n) {
+  return n < 2 ? 1 : slowFib(n - 1) + slowFib(n - 2);
+}
+
+function fastFib(n) {
+  let a = 1;
+  let b = 1;
+
+  for (let i = 2; i <= n; i++) {
+    [b, a] = [a + b, b];
+  }
+
+  return b;
+}
+
+/**
+ * 爬楼梯
+ * 
+ * 爬 n 级楼梯，每次可以爬 every 级
+ */
+// 分析：每次可以爬3级
+// f(n) = f(n-1) + f(n-2) + f(n-3)
+// 如果爬2级就是两项相加，n级就是n项相加
+// 0 1 2 3 4 5
+// 1 1 2 4 7 13
+
+// 每次可爬 2 级
+function steps2(n) {
+  const s = [1, 1];
+  for (let i = 2; i <= n; i++) {
+    s[i] = s[i - 1] + s[i - 2];
+  }
+  return s.pop();
+}
+
+// 每次可爬 n 级
+function stepsn(n) {
+  const s = [1, 1];
+  for (let i = 2; i <= n; i++) {
+    s[i] = s.reduce((acc, item) => (acc + item), 0);
+  }
+  return s.pop();
+}
