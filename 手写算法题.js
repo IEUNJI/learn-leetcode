@@ -283,3 +283,35 @@ function stepsn(n) {
   }
   return s.pop();
 }
+
+/**
+ * 深度优先搜索和广度优先搜索
+ * dfs和bfs
+ * 栈和队列
+ */
+
+function dfs(node) {
+  const stack = [node]; // 栈 先进后出
+
+  while(stack.length > 0) {
+    const last = stack.pop(); // 出栈
+    console.log('dfs', last.key); // 搜索
+
+    last.children.slice().reverse().forEach(child => {
+      stack.push(child); // 入栈
+    });
+  }
+}
+
+function bfs(node) {
+  const queue = [node]; // 队列 先进先出
+
+  while(queue.length > 0) {
+    const first = queue.shift(); // 出队列
+    console.log('bfs', first.key); // 搜素
+
+    first.children.forEach(child => {
+      queue.push(child); // 入队列
+    });
+  }
+}
