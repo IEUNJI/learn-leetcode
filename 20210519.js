@@ -8,7 +8,7 @@
  * @return {number[][]}
  */
 var combinationSum = function (candidates, target) {
-  const result = [];
+  let result = [];
 
   function sumFn(arr) {
     return arr.reduce((acc, num) => acc + num, 0);
@@ -18,12 +18,12 @@ var combinationSum = function (candidates, target) {
     if (index > candidates.length - 1) {
       return;
     }
+
     const sum = sumFn(decisions);
 
     if (sum === target) {
       result.push(decisions);
     } else if (sum < target) {
-      console.log(decisions);
       // 要 跳
       pick(index + 1, decisions.concat(candidates[index]));
       // 要 循环
@@ -35,8 +35,13 @@ var combinationSum = function (candidates, target) {
 
   pick(0, []);
 
-  console.log(result);
+  result = result.map(one => one.join(','));
+  result = [...new Set(result)];
+  result = result.map(one => one.split(',').map(Number));
+
+  return result;
 };
+
 let candidates, target;
 candidates = [2, 3, 6, 7], target = 7;
 candidates = [2, 3, 5], target = 8;

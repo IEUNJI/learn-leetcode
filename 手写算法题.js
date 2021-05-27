@@ -150,6 +150,84 @@ function quickSort(arr) {
   sort(arr, 0, arr.length);
 }
 
-const arr = [12, 13, 452, 245, 3124, 324, 76, 234, 54, 45];
-quickSort(arr);
-console.log(arr);
+/**
+ * 决策树 decisions
+ */
+
+// 子集问题：求 [a, b, c] 的所有子集
+// 解 [a, b, c] [a, b] [a, c] [b, c] [a] [b] [c] [] 共 2^3 个
+
+function findSubSets(arr) {
+  function find(arr, decisions) {
+    // 决策完毕
+    if (arr.length === decisions.length) {
+      const one = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (decisions[i]) {
+          one.push(arr[i]);
+        }
+      }
+      return [one]; // concat默认展开，所以这里包了一层
+    }
+
+    let res = [];
+
+    // 两种决策 true 代表选，false 代表不选
+    res = res.concat(find(arr, decisions.concat(true)));
+    res = res.concat(find(arr, decisions.concat(false)));
+
+    return res;
+  }
+
+  return find(arr, []);
+}
+
+// 全排列问题：求 'abc' 的全排列
+// 解 abc acb bac bca cab cba 共 3! 个
+
+function permutation(str) {
+  function per(str, decisions) {
+    // 决策完毕
+    if (str.length === decisions.length) {
+      let one = '';
+      for (let j = 0; j < decisions.length; j++) {
+        one += str[decisions[j]];
+      }
+      return one;
+    }
+
+    let res = [];
+
+    // 多种决策，决策数组里是索引
+    for (let i = 0; i < str.length; i++) {
+      if (decisions.includes(i)) {
+        // 包含的索引就不再继续决策了
+        continue;
+      }
+
+      res = res.concat(per(str, decisions.concat(i)));
+    }
+
+    return res;
+  }
+
+  return per(str, []);
+}
+
+// 组合问题：从 A B C D 四个球种取出 2 个，有多少种组合
+// 解 4 * 3 / (2!) = 6 种组合 (AB AC AD BC BD CD)
+// 分析：如果选A，从BCD中再取1个，不选A，从BCD中选2个
+function take(arr, count) {
+  if (count === 0 || count === arr.length) {
+    return [arr.slice(0, count)];
+  }
+
+  let res = [];
+  // 取出一个
+  const [first, ...others] = arr;
+  // 选这个
+  res = res.concat(take(others, count - 1).map(item => [first, ...item]));
+  // 不选这个
+  res = res.concat(take(others, count));
+  return res;
+}
