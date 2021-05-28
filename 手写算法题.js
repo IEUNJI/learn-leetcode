@@ -315,3 +315,55 @@ function bfs(node) {
     });
   }
 }
+
+/**
+ * 反转单向链表
+ * 1 -> 2 -> 3 -> 4
+ * 4 -> 3 -> 2 -> 1
+ * 回溯（函数调用堆栈）
+ */
+
+function reverse(p) {
+  if (p.next) {
+    reverse(p.next);
+    // 此处是所有的递归执行完毕，此时p指向了倒数第二个节点
+    // 利用函数调用堆栈的天然回溯结构，开始逆向处理
+    p.next.next = p;
+    p.next = null;
+  } else {
+    res.head = p;
+  }
+}
+
+const res = {};
+
+reverse({
+  val: 1,
+  next: {
+    val: 2,
+    next: {
+      val: 3,
+      next: {
+        val: 4,
+        next: null
+      }
+    }
+  }
+});
+
+console.log(JSON.stringify(res.head));
+
+/**
+ * 反转二叉树
+ */
+
+function reverseBTree(node) {
+  if (!node) return;
+  
+  const temp = node.left;
+  node.left = node.right;
+  node.right = temp;
+
+  reverseBTree(node.left);
+  reverseBTree(node.right);
+}
