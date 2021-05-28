@@ -1,5 +1,5 @@
 /**
- * 102. 二叉树的层序遍历
+ * 104. 二叉树的最大深度
  */
 
 function TreeNode(val, left, right) {
@@ -21,7 +21,7 @@ root.right.right.left = new TreeNode(8);
  * @param {TreeNode} root
  * @return {number[][]}
  */
-var levelOrder = function (root) {
+var maxDepth = function (root) {
   var res = [];
 
   function traversal(p, depth) {
@@ -39,8 +39,8 @@ var levelOrder = function (root) {
 
   traversal(root, 0);
 
-  return res;
+  return res.length;
 };
 
-var res = levelOrder(root);
+var res = maxDepth(root);
 console.log(res);
