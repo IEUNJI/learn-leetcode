@@ -55,7 +55,7 @@ var removeNthFromEnd1 = function (head, n) {
   return head;
 };
 
-var removeNthFromEnd = function (head, n) {
+var removeNthFromEnd2 = function (head, n) {
   // 快慢指针
   var fast = head;
   var slow = head;
@@ -77,10 +77,43 @@ var removeNthFromEnd = function (head, n) {
   return head;
 };
 
+var removeNthFromEnd = function (head, n) {
+  var index = 0;
+  var cur = null;
+  var prev = null;
+
+  function next(p) {
+    if (!p) return;
+
+    next(p.next);
+
+    index++;
+
+    if (index === n) {
+      cur = p;
+    }
+
+    if (index === n + 1) {
+      prev = p;
+    }
+  }
+
+  next(head);
+
+  if (prev == null) {
+    head = cur.next;
+  } else {
+    prev.next = cur.next;
+  }
+
+  return head;
+};
+
 var head, n;
 head = [1, 2, 3, 4, 5], n = 2;
-// head = [1], n = 1;
-// head = [1,2], n = 2;
+head = [1], n = 1;
+head = [1,2], n = 2;
+head = [1,2], n = 1;
 
 head = createListNodeFromArray(head);
 

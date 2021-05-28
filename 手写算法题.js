@@ -367,3 +367,35 @@ function reverseBTree(node) {
   reverseBTree(node.left);
   reverseBTree(node.right);
 }
+
+/**
+ * 三数之和
+ * 决策树
+ */
+
+function threeSum(arr) {
+  var res = {};
+
+  function pick(index, count, decisions) {
+    if (index >= arr.length || count <= 0) {
+      if (decisions.length === 3 && decisions.reduce((a, b) => (a + b), 0) === 0) {
+        decisions = decisions.sort((a, b) => (a - b));
+        var key = decisions.toString();
+        if (!res[key]) {
+          res[key] = decisions;
+        }
+      }
+      return;
+    }
+
+    pick(index + 1, count - 1, decisions.concat(arr[index]));
+    pick(index + 1, count, decisions);
+  }
+
+  pick(0, 3, []);
+
+  return Object.values(res);
+}
+
+console.log('res', threeSum([-1,0,1,2,-1,-4]));;
+
