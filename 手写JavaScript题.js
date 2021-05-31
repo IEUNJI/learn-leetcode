@@ -3,6 +3,7 @@
  */
 
 Function.prototype.call = function call(context, ...args) {
+  // 将函数放到上下文对象上调用，然后删除新增的key
   const cacheKey = '__bindCallback__';
   Object.defineProperty(context, cacheKey, {
     configurable: true, // 后续可删除
@@ -16,6 +17,7 @@ Function.prototype.call = function call(context, ...args) {
 };
 
 Function.prototype.bind = function bind(context, ...bindArgs) {
+  // 利用apply实现，注意绑定参数的拼接
   return (...args) => {
     this.apply(context, bindArgs.concat(args));
   };
@@ -40,6 +42,7 @@ fn.call(context, 1, 2, 3);
  */
 
 Array.prototype.reduce = function reduce(callback, acc) {
+  // acc 累加器，没有acc说明是首次调用，取前2项
   for (let i = 0; i < this.length; i++) {
     if (typeof acc === 'undefined') {
       acc = callback(this[i], this[i + 1], i + 1, this);
@@ -62,6 +65,8 @@ console.log(sum);
  */
 
 function debounce(callback, delay) {
+  // 防抖，闭包存放timer，每次调用都先清一下
+  // 函数调用通过定时器，所以是先延迟
   let timer = null;
 
   return (...args) => {
@@ -74,6 +79,8 @@ function debounce(callback, delay) {
 }
 
 function throttle(callback, delay) {
+  // 节流，闭包缓存canRun，默认可以run
+  // 运行前将canRun置为false，延迟后再canRun true
   let canRun = true;
 
   return (...args) => {
@@ -93,6 +100,8 @@ function throttle(callback, delay) {
  */
 
 Object.create = function create(proto, props) {
+  // 用一个辅助类，改变原型实现
+  // 注意第二个参数props传给defineProperties
   function CreateHelper() { }
   CreateHelper.prototype = proto;
 
@@ -124,6 +133,8 @@ console.log(b.__proto__.name);
  */
 
 function newHelper(constructor, ...args) {
+  // 构造上下文对象，即实例，通过Object create控制原型指向
+  // 注意构造函数通过apply调用之后的返回值，如果是引用类型，会覆盖this
   const context = Object.create(constructor.prototype);
 
   const res = constructor.apply(context, args);
@@ -161,6 +172,7 @@ console.log(cat);
  */
 
 Promise.all = function all(promises) {
+  // 计数，注意普通值类型直接 done 成功
   return new Promise((resolve, reject) => {
     const values = [];
     let count = 0;
@@ -204,11 +216,11 @@ Promise.any = function any(promises) {
       const item = promises[i];
 
       if (item instanceof Promise) {
-        item.then(reject, error => {
+        item.then(resolve, error => {
           done(error, i);
         });
       } else {
-        reject(item);
+        resolve(item);
       }
     }
   });
