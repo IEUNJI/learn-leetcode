@@ -926,8 +926,18 @@ var find = function (origin) {
 };
 
 // 查找 data 中，符合条件的数据，并进行排序
-var result = find(data).where({
+var result1 = find(data).where({
   'title': /\d$/
 }).orderBy('userId', 'desc');
 
-console.log(result); // [ { userId: 19, title: 'title2' }, { userId: 8, title: 'title1' } ]
+var result2 = find(data).orderBy('userId', 'desc').where({
+  'title': /\d$/
+});
+
+var result3 = find(data);
+
+console.log(result1); // [ { userId: 19, title: 'title2' }, { userId: 8, title: 'title1' } ]
+
+console.log(result2); // [ { userId: 19, title: 'title2' }, { userId: 8, title: 'title1' } ]
+
+console.log(result3); // [ { userId: 19, title: 'title2' }, { userId: 15, title: null }, { userId: 11, title: 'other' }, { userId: 8, title: 'title1' } ]
